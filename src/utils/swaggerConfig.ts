@@ -1,4 +1,5 @@
 import swaggerJSDoc from "swagger-jsdoc";
+import { PORT } from "../configs/config";
 
 const swaggerDefinition = {
   openapi: "3.0.0",
@@ -9,7 +10,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: "http://localhost:9092/api", // Change to your server URL
+      url: `http://localhost:${PORT}/api`, // Change to your server URL
       description: "Development server",
     },
   ],
