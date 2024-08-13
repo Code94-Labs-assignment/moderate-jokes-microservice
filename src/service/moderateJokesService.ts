@@ -1,10 +1,11 @@
-import axios from 'axios';
+import axios from "axios";
 import { responseFormate } from "../models/response";
 import bcrypt from "bcrypt";
 import { generateAccessToken } from "../jwt/jwt";
 
-const submitJokesServiceUrl = 'http://submit-jokes-microservice-url/api/jokes'; // Replace with actual URL
-const deliverJokesServiceUrl = 'http://deliver-jokes-microservice-url/api/jokes'; // Replace with actual URL
+const submitJokesServiceUrl = "http://submit-jokes-microservice-url/api/jokes"; // Replace with actual URL
+const deliverJokesServiceUrl =
+  "http://deliver-jokes-microservice-url/api/jokes"; // Replace with actual URL
 
 export const loginService = async (loginData: {
   email: string;
@@ -37,7 +38,11 @@ export const loginService = async (loginData: {
 export const getPendingJokesService = async (): Promise<responseFormate> => {
   try {
     const response = await axios.get(`${submitJokesServiceUrl}`);
-    return { code: 200, message: "Pending jokes retrieved", data: response.data };
+    return {
+      code: 200,
+      message: "Pending jokes retrieved",
+      data: response.data,
+    };
   } catch (error: any) {
     return {
       code: 500,
@@ -52,7 +57,10 @@ export const updateJokeService = async (
   jokeData: any,
 ): Promise<responseFormate> => {
   try {
-    const response = await axios.put(`${submitJokesServiceUrl}/${id}`, jokeData);
+    const response = await axios.put(
+      `${submitJokesServiceUrl}/${id}`,
+      jokeData,
+    );
     return {
       code: 200,
       message: "Joke updated successfully",
@@ -70,7 +78,10 @@ export const approveJokeService = async (
     const jokeResponse = await axios.get(`${submitJokesServiceUrl}/${id}`);
     const approvedJoke = jokeResponse.data;
 
-    const deliverResponse = await axios.post(`${deliverJokesServiceUrl}`, approvedJoke);
+    const deliverResponse = await axios.post(
+      `${deliverJokesServiceUrl}`,
+      approvedJoke,
+    );
 
     await axios.delete(`${submitJokesServiceUrl}/${id}`);
 
