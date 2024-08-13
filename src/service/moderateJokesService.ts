@@ -1,8 +1,10 @@
-import { JokeRepository } from "../repository/jokeRepository";
+import axios from 'axios';
 import { responseFormate } from "../models/response";
 import bcrypt from "bcrypt";
 import { generateAccessToken } from "../jwt/jwt";
-const jokeRepo = new JokeRepository();
+
+const submitJokesServiceUrl = 'http://submit-jokes-microservice-url/api/jokes'; // Replace with actual URL
+const deliverJokesServiceUrl = 'http://deliver-jokes-microservice-url/api/jokes'; // Replace with actual URL
 
 export const loginService = async (loginData: {
   email: string;
@@ -34,8 +36,8 @@ export const loginService = async (loginData: {
 
 export const getPendingJokesService = async (): Promise<responseFormate> => {
   try {
-    const jokes = await jokeRepo.getPendingJokes();
-    return { code: 200, message: "Pending jokes retrieved", data: jokes };
+    const response = await axios.get(`${submitJokesServiceUrl}`);
+    return { code: 200, message: "Pending jokes retrieved", data: response.data };
   } catch (error: any) {
     return {
       code: 500,
@@ -50,11 +52,11 @@ export const updateJokeService = async (
   jokeData: any,
 ): Promise<responseFormate> => {
   try {
-    const updatedJoke = await jokeRepo.updateJoke(id, jokeData);
+    const response = await axios.put(`${submitJokesServiceUrl}/${id}`, jokeData);
     return {
       code: 200,
       message: "Joke updated successfully",
-      data: updatedJoke,
+      data: response.data,
     };
   } catch (error: any) {
     return { code: 500, message: "Error updating joke", error: error.message };
@@ -65,11 +67,17 @@ export const approveJokeService = async (
   id: string,
 ): Promise<responseFormate> => {
   try {
-    const approvedJoke = await jokeRepo.approveJoke(id);
+    const jokeResponse = await axios.get(`${submitJokesServiceUrl}/${id}`);
+    const approvedJoke = jokeResponse.data;
+
+    const deliverResponse = await axios.post(`${deliverJokesServiceUrl}`, approvedJoke);
+
+    await axios.delete(`${submitJokesServiceUrl}/${id}`);
+
     return {
       code: 201,
-      message: "Joke approved successfully",
-      data: approvedJoke,
+      message: "Joke approved and delivered successfully",
+      data: deliverResponse.data,
     };
   } catch (error: any) {
     return { code: 500, message: "Error approving joke", error: error.message };
@@ -80,7 +88,7 @@ export const rejectJokeService = async (
   id: string,
 ): Promise<responseFormate> => {
   try {
-    await jokeRepo.rejectJoke(id);
+    await axios.delete(`${submitJokesServiceUrl}/${id}`);
     return { code: 200, message: "Joke rejected successfully", data: null };
   } catch (error: any) {
     return { code: 500, message: "Error rejecting joke", error: error.message };
@@ -102,14 +110,6 @@ const authenticateUser = async (
     return false;
   }
 
-  // Compare the provided password with the stored hash
   const isPasswordValid = await bcrypt.compare(password, user.password);
   return isPasswordValid;
 };
-
-async function hashPassword() {
-  const password = "admin123"; // Replace with your password
-  const saltRounds = 10;
-  const hash = await bcrypt.hash(password, saltRounds);
-  console.log("Hashed password:", hash);
-}
