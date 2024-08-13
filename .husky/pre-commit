@@ -1,0 +1,21 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo '👷‍♂️ Running pre-commit checks... Please wait.'
+
+# Check Prettier formatting standards
+if ! npm run check:format; then
+  echo '❌ Code formatting issues detected by Prettier.'
+  echo '🔧 Automatically fixing issues with `npm run format`...'
+  npm run format
+  
+  # Re-run the formatting check to ensure all issues are fixed
+  if ! npm run check:format; then
+    echo '❌ Some formatting issues could not be fixed automatically. Please review manually.'
+    exit 1
+  else
+    echo '✅ Formatting issues have been fixed. Proceeding with the commit...'
+  fi
+else
+  echo '✅ All checks passed! Proceeding with the commit...'
+fi
