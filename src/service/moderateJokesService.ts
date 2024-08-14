@@ -180,9 +180,9 @@ export const approveJokeService = async (
 export const rejectJokeService = async (
   id: string,
 ): Promise<responseFormate> => {
-  logger.info("Service - rejectJokeService: Start", { id });
+  logger.info(`Service - rejectJokeService: Start - ${id}`);
   try {
-    await axios.delete(`${submitJokesServiceUrl}/${id}/reject`);
+    await axios.put(`${submitJokesServiceUrl}/${id}/reject`);
     const result = {
       code: 200,
       message: "Joke rejected successfully",
