@@ -22,7 +22,9 @@ app.use("/api/moderate-jokes", moderateJokesRouter);
 const PORT = process.env.PORT || "9092";
 
 app.listen(PORT, () => {
-  logger.info(`Server is running on  ${process.env.NEXT_PUBLIC_MODERATE_SERVICE}:${PORT}/`);
+  logger.info(
+    `Server is running on  ${process.env.NEXT_PUBLIC_MODERATE_SERVICE}:${PORT}/`,
+  );
   logger.info(
     `Swagger docs are available at ${process.env.NEXT_PUBLIC_MODERATE_SERVICE}/api-docs`,
   );
