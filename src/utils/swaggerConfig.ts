@@ -10,7 +10,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: `http://localhost:${PORT}/api`, // Change to your server URL
+      url: `${process.env.NEXT_PUBLIC_MODERATE_SERVICE}/api`, // Change to your server URL
       description: "Development server",
     },
   ],
