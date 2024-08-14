@@ -1,0 +1,11 @@
+MONGODB_URL=mongodb+srv://admin:admin@cluster0.jckjz.mongodb.net/jokes_db?retryWrites=true&w=majority&appName=Cluster0
+PORT=3002
+JWT_SECRET=jokes_db
+baseURL=http://localhost:3002
+
+# NEXT_PUBLIC_SUBMIT_SERVICE=http://localhost:3001/api/jokes
+# NEXT_PUBLIC_MODERATE_SERVICE=http://localhost:3002/api/moderate-jokes
+# NEXT_PUBLIC_DELIVER_SERVICE=http://localhost:3003/api/Deliver-jokes
+NEXT_PUBLIC_SUBMIT_SERVICE=https://submit-jokes-microservice-production-5d7b.up.railway.app
+NEXT_PUBLIC_MODERATE_SERVICE=https://moderate-jokes-microservice-production-5c00.up.railway.app
+NEXT_PUBLIC_DELIVER_SERVICE=https://deliver-jokes-microservice-production-668a.up.railway.app
